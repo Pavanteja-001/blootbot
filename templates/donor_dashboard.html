@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Dashboard - BloodBot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-2xl font-bold text-center mb-6">Donor Dashboard</h1>
+        <div class="max-w-lg mx-auto bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-4">Your Details</h2>
+            <p><strong>Name:</strong> {{ user.name }} {% if user.verified %}<span class="bg-green-200 text-green-800 text-xs px-2 py-1 rounded">Verified ✓</span>{% endif %}</p>
+            <p><strong>Blood Group:</strong> {{ user.blood_group }}</p>
+            <p><strong>Address:</strong> {{ user.address }}</p>
+            <p><strong>Donation Count:</strong> {{ user.donation_count }}</p>
+            <p><strong>Last Donation:</strong> {{ user.last_donation_date }}</p>
+            <h3 class="text-lg font-semibold mt-4">Matching Blood Requests</h3>
+            <ul class="mt-2">
+                {% for req in requests %}
+                <li class="mb-2">
+                    {{ req.name }} needs {{ req.units_needed }} units of {{ req.blood_group }} at {{ req.hospital_name }}, {{ req.hospital_location }} ({{ req.urgency }}, by {{ req.time_needed }}). Contact: {{ req.contact_number }}
+                </li>
+                {% else %}
+                <li>No matching requests found.</li>
+                {% endfor %}
+            </ul>
+            <h3 class="text-lg font-semibold mt-4">Your Reviews</h3>
+            <ul class="mt-2">
+                {% for review in user.reviews %}
+                <li class="mb-2 border-t pt-2">
+                    <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+                    <p><strong>Comment:</strong> {{ review.comment }}</p>
+                    <p><strong>From:</strong> {{ review.patient_name }}</p>
+                    <p><strong>Date:</strong> {{ review.date.strftime('%Y-%m-%d %H:%M') }}</p>
+                </li>
+                {% else %}
+                <li>No reviews yet.</li>
+                {% endfor %}
+            </ul>
+            <a href="/login" class="text-blue-500 mt-4 inline-block">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

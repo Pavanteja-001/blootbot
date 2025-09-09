@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Dashboard - BloodBot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-2xl font-bold text-center mb-6">Hospital Dashboard</h1>
+        <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-4">Hospital Details</h2>
+            <form id="hospitalForm" class="mb-8">
+                <div class="mb-4">
+                    <label class="block text-gray-700">Registration Number</label>
+                    <input type="text" name="registration_number" value="{{ hospital.registration_number }}" class="w-full border px-3 py-2 rounded" readonly>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Name</label>
+                    <input type="text" name="name" value="{{ hospital.name }}" class="w-full border px-3 py-2 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">Address</label>
+                    <input type="text" name="address" value="{{ hospital.address }}" class="w-full border px-3 py-2 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">City</label>
+                    <input type="text" name="city" value="{{ hospital.city }}" class="w-full border px-3 py-2 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">District</label>
+                    <input type="text" name="district" value="{{ hospital.district }}" class="w-full border px-3 py-2 rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700">State</label>
+                    <input type="text" name="state" value="{{ hospital.state }}" class="w-full border px-3 py-2 rounded" required>
+                </div>
+                <h3 class="text-lg font-semibold mb-2">Blood Inventory</h3>
+                {% for blood_group in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
+                <div class="mb-4">
+                    <label class="block text-gray-700">{{ blood_group }}</label>
+                    <input type="number" name="{{ blood_group }}" value="{{ hospital.blood_inventory[blood_group] | default(0) }}" class="w-full border px-3 py-2 rounded" min="0">
+                </div>
+                {% endfor %}
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Update Details</button>
+            </form>
+
+            <h2 class="text-xl font-semibold mb-4">Blood Requests</h2>
+            {% if requests %}
+            <table class="w-full mb-8">
+                <thead>
+                    <tr>
+                        <th class="border px-4 py-2">Patient Name</th>
+                        <th class="border px-4 py-2">Contact</th>
+                        <th class="border px-4 py-2">Blood Group</th>
+                        <th class="border px-4 py-2">Units Needed</th>
+                        <th class="border px-4 py-2">Urgency</th>
+                        <th class="border px-4 py-2">Time Needed</th>
+                        <th class="border px-4 py-2">City</th>
+                        <th class="border px-4 py-2">Status</th>
+                        <th class="border px-4 py-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td class="border px-4 py-2">{{ request.patient_name }}</td>
+                        <td class="border px-4 py-2">{{ request.patient_contact }}</td>
+                        <td class="border px-4 py-2">{{ request.blood_group }}</td>
+                        <td class="border px-4 py-2">{{ request.units_needed }}</td>
+                        <td class="border px-4 py-2">{{ request.urgency }}</td>
+                        <td class="border px-4 py-2">{{ request.time_needed }}</td>
+                        <td class="border px-4 py-2">{{ request.city }}</td>
+                        <td class="border px-4 py-2">{{ request.status | capitalize }}</td>
+                        <td class="border px-4 py-2">
+                            {% if request.status == 'pending' %}
+                            <button onclick="approveRequest('{{ request._id }}')" class="bg-green-500 text-white px-2 py-1 rounded">Approve</button>
+                            <button onclick="rejectRequest('{{ request._id }}')" class="bg-red-500 text-white px-2 py-1 rounded">Reject</button>
+                            {% else %}
+                            <span>-</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No blood requests.</p>
+            {% endif %}
+
+            <h2 class="text-xl font-semibold mb-4">Unverified Donors</h2>
+            {% if donors %}
+            <table class="w-full">
+                <thead>
+                    <tr>
+                        <th class="border px-4 py-2">Name</th>
+                        <th class="border px-4 py-2">Blood Group</th>
+                        <th class="border px-4 py-2">Contact</th>
+                        <th class="border px-4 py-2">City</th>
+                        <th class="border px-4 py-2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for donor in donors %}
+                    <tr>
+                        <td class="border px-4 py-2">{{ donor.name }}</td>
+                        <td class="border px-4 py-2">{{ donor.blood_group }}</td>
+                        <td class="border px-4 py-2">{{ donor.contact_number }}</td>
+                        <td class="border px-4 py-2">{{ donor.city }}</td>
+                        <td class="border px-4 py-2">
+                            <button onclick="verifyDonor('{{ donor._id }}')" class="bg-blue-500 text-white px-2 py-1 rounded">Verify</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No unverified donors in your city.</p>
+            {% endif %}
+        </div>
+        <p class="text-center mt-4"><a href="{{ url_for('hospital_login') }}" class="text-blue-500">Logout</a></p>
+    </div>
+    <script>
+        async function approveRequest(requestId) {
+            const response = await fetch(`/hospital/approve_request/${requestId}`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+            alert(result.message || result.error);
+            if (response.ok) {
+                window.location.reload();
+            }
+        }
+
+        async function rejectRequest(requestId) {
+            const response = await fetch(`/hospital/reject_request/${requestId}`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+            alert(result.message || result.error);
+            if (response.ok) {
+                window.location.reload();
+            }
+        }
+
+        async function verifyDonor(donorId) {
+            const response = await fetch(`/hospital/verify_donor/${donorId}`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+            alert(result.message || result.error);
+            if (response.ok) {
+                window.location.reload();
+            }
+        }
+
+        document.getElementById('hospitalForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/hospital/dashboard', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            alert(result.message || result.error);
+            if (response.ok) {
+                window.location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

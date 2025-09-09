@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BloodBot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-2xl font-bold text-center mb-6">Admin Dashboard</h1>
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-4">Donors</h2>
+            <ul class="mb-6">
+                {% for donor in donors %}
+                <li>{{ donor.name }} ({{ donor.blood_group }}), {{ donor.address }}, Contact: {{ donor.contact_number }}</li>
+                {% else %}
+                <li>No donors found.</li>
+                {% endfor %}
+            </ul>
+            <h2 class="text-xl font-semibold mb-4">Patients</h2>
+            <ul class="mb-6">
+                {% for patient in patients %}
+                <li>{{ patient.name }} needs {{ patient.units_needed }} units of {{ patient.blood_group }} at {{ patient.hospital_name }}, {{ patient.hospital_location }} ({{ patient.urgency }})</li>
+                {% else %}
+                <li>No patients found.</li>
+                {% endfor %}
+            </ul>
+            <h2 class="text-xl font-semibold mb-4">Hospitals</h2>
+            <ul>
+                {% for hospital in hospitals %}
+                <li>{{ hospital.name }} ({{ hospital.registration_number }}), {{ hospital.city }} - Blood Inventory: {% for bg, units in hospital.blood_inventory.items() %}{{ bg }}: {{ units }} {% endfor %}</li>
+                {% else %}
+                <li>No hospitals found.</li>
+                {% endfor %}
+            </ul>
+            <a href="/" class="text-blue-500 mt-4 inline-block">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

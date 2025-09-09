@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Login - BloodBot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-2xl font-bold text-center mb-6">Hospital Login</h1>
+        <form id="hospitalLoginForm" class="max-w-lg mx-auto bg-white p-6 rounded shadow">
+            <div class="mb-4">
+                <label class="block text-gray-700">Registration Number</label>
+                <input type="text" name="registration_number" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Password</label>
+                <input type="password" name="password" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
+        </form>
+        <p class="text-center mt-4"><a href="/hospital/register" class="text-blue-500">Need to register? Click here</a></p>
+    </div>
+    <script>
+        document.getElementById('hospitalLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch('/hospital/login', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                window.location.href = '/hospital/dashboard';
+            } else {
+                const result = await response.json();
+                alert(result.error || 'Login failed');
+            }
+        });
+    </script>
+</body>
+</html>

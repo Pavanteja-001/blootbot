@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - BloodBot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-2xl font-bold text-center mb-6">Patient Dashboard</h1>
+        <div class="max-w-lg mx-auto bg-white p-6 rounded shadow">
+            <h2 class="text-xl font-semibold mb-4">Your Request</h2>
+            {% if blood_request %}
+            <p><strong>Name:</strong> {{ user.name }}</p>
+            <p><strong>Blood Group:</strong> {{ user.blood_group }}</p>
+            <p><strong>Hospital:</strong> {{ blood_request.hospital_name }}, {{ blood_request.hospital_location }}</p>
+            <p><strong>Units Needed:</strong> {{ blood_request.units_needed }}</p>
+            <p><strong>Urgency:</strong> {{ blood_request.urgency }}</p>
+            <p><strong>Time Needed:</strong> {{ blood_request.time_needed }}</p>
+            <p><strong>Status:</strong> {{ blood_request.status }}</p>
+            {% else %}
+            <p>No active blood request found.</p>
+            {% endif %}
+            <h3 class="text-lg font-semibold mt-4">Available Donors</h3>
+            <ul class="mt-2">
+                {% for donor in donors %}
+                <li>
+                    {{ donor.name }} ({{ donor.blood_group }}) at {{ donor.address }}. Contact: {{ donor.contact_number }}
+                </li>
+                {% else %}
+                <li>No matching donors found.</li>
+                {% endfor %}
+            </ul>
+            <a href="/login" class="text-blue-500 mt-4 inline-block">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Registration - BloodBot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <h1 class="text-2xl font-bold text-center mb-6">Hospital Registration</h1>
+        <form id="hospitalRegisterForm" class="max-w-lg mx-auto bg-white p-6 rounded shadow">
+            <div id="formMessage" class="hidden mb-4 p-4 rounded"></div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Registration Number</label>
+                <input type="text" name="registration_number" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Hospital Name</label>
+                <input type="text" name="name" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Address</label>
+                <input type="text" name="address" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">City</label>
+                <input type="text" name="city" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">District</label>
+                <input type="text" name="district" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">State</label>
+                <input type="text" name="state" class="w-full border px-3 py-2 rounded" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Password</label>
+                <input type="password" name="password" id="password" class="w-full border px-3 py-2 rounded" required minlength="6">
+                <p id="passwordError" class="text-red-500 text-sm mt-1 hidden">Password must be at least 6 characters.</p>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700">Blood Inventory (Units)</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label>A+</label><input type="number" name="A+" class="w-full border px-3 py-2 rounded" min="0" value="0"></div>
+                    <div><label>A-</label><input type="number" name="A-" class="w-full border px-3 py-2 rounded" min="0" value="0"></div>
+                    <div><label>B+</label><input type="number" name="B+" class="w-full border px-3 py-2 rounded" min="0" value="0"></div>
+                    <div><label>B-</label><input type="number" name="B-" class="w-full border px-3 py-2 rounded" min="0" value="0"></div>
+                    <div><label>AB+</label><input type="number" name="AB+" class="w-full border px-3 py-2 rounded" min="0" value="0"></div>
+                    <div><label>AB-</label><input type="number" name="AB-" class="w-full border px-3 py-2 rounded" min="0" value="0"></div>
+                    <div><label>O+</label><input type="number" name="O+" class="w-full border px-3 py-2 rounded" min="0" value="0"></div>
+                    <div><label>O-</label><input type="number" name="O-" class="w-full border px-3 py-2 rounded" min="0" value="0"></div>
+                </div>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Register</button>
+        </form>
+        <p class="text-center mt-4"><a href="/hospital/login" class="text-blue-500">Already registered? Login here</a></p>
+    </div>
+    <script>
+        document.getElementById('hospitalRegisterForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formMessage = document.getElementById('formMessage');
+            const password = document.getElementById('password').value;
+            const passwordError = document.getElementById('passwordError');
+
+            // Client-side password validation
+            if (password.length < 6) {
+                passwordError.classList.remove('hidden');
+                return;
+            } else {
+                passwordError.classList.add('hidden');
+            }
+
+            const formData = new FormData(e.target);
+            const response = await fetch('/hospital/register', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+
+            formMessage.classList.remove('hidden');
+            if (response.ok) {
+                formMessage.classList.remove('bg-red-100', 'text-red-700');
+                formMessage.classList.add('bg-green-100', 'text-green-700');
+                formMessage.textContent = 'Hospital registered successfully!';
+                setTimeout(() => {
+                    window.location.href = '/hospital/login';
+                }, 2000);
+            } else {
+                formMessage.classList.remove('bg-green-100', 'text-green-700');
+                formMessage.classList.add('bg-red-100', 'text-red-700');
+                formMessage.textContent = result.error || 'Registration failed';
+            }
+        });
+    </script>
+</body>
+</html>
