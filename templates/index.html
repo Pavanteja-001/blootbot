@@ -1,29 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BloodBot - Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BloodBot - Connecting Lives Through Blood Donation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+
+    .hero-gradient { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%); }
+    .card-hover { transition: all 0.3s ease; }
+    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(220,38,38,0.15); }
+    .btn-primary { background: linear-gradient(135deg,#dc2626,#b91c1c); transition: all .3s; position: relative; overflow: hidden; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(220,38,38,0.3); }
+    .btn-primary::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition:left .5s; }
+    .btn-primary:hover::before { left:100%; }
+    .btn-secondary { background:white; color:#dc2626; border:2px solid #dc2626; transition: all .3s; }
+    .btn-secondary:hover { background:#dc2626; color:white; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(220,38,38,0.25); }
+
+    .pulse-animation { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% {opacity:1;} 50% {opacity:0.7;} }
+
+    .fade-in { animation: fadeIn .8s ease-out; }
+    @keyframes fadeIn { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+
+    .dropdown-enter { animation: dropdownEnter .22s ease-out; }
+    @keyframes dropdownEnter { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    .blood-drop { width:20px; height:20px; background:#dc2626; border-radius:50% 50% 50% 50% / 60% 60% 40% 40%; animation: float 3s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+
+    /* smooth arrow rotation */
+    #dropdown-arrow { transition: transform .18s ease; transform-origin: center; }
+
+  </style>
 </head>
-<body class="bg-gray-100">
-    <header class="bg-blue-600 text-white py-4">
-        <div class="container mx-auto text-center">
-            <h1 class="text-3xl font-bold">Welcome to BloodBot</h1>
-            <p class="mt-2">Connecting blood donors and patients seamlessly</p>
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="hero-gradient text-white shadow-xl relative overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+    <nav class="relative z-10 container mx-auto px-4 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="blood-drop"></div>
+          <h1 class="text-2xl font-bold font-poppins">BloodBot</h1>
         </div>
-    </header>
-    <main class="container mx-auto py-8">
-        <section class="text-center">
-            <h2 class="text-2xl font-semibold mb-4">Get Started</h2>
-            <p class="mb-4">BloodBot helps you donate or request blood through Telegram or our web interface.</p>
-            <div class="space-x-4">
-                <a href="/hospital/register" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Hospital Registration</a>
-                <a href="/hospital/login" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700">Hospital Login</a>
-                <a href="/login" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700">User Login</a>
-                <a href="/admin" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Admin Access</a>
+        <div class="hidden md:flex space-x-6">
+          <a href="#" class="hover:text-red-200 transition-colors">About</a>
+          <a href="#" class="hover:text-red-200 transition-colors">Services</a>
+          <a href="#" class="hover:text-red-200 transition-colors">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="relative z-10 container mx-auto px-4 py-16 text-center">
+      <h2 class="text-4xl md:text-6xl font-bold mb-6 fade-in">
+        Connecting Lives Through
+        <span class="text-red-200">Blood Donation</span>
+      </h2>
+      <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90 fade-in">
+        Join our mission to save lives by connecting blood donors with patients in need. Every donation matters, every life counts.
+      </p>
+
+      <!-- Hero Image Placeholder -->
+      <div class="bg-white bg-opacity-20 rounded-lg p-8 mb-8 backdrop-blur-sm">
+        <div class="text-center text-white">
+          <div class="w-24 h-24 mx-auto mb-4 bg-white bg-opacity-30 rounded-full flex items-center justify-center">
+            <div class="blood-drop w-8 h-8"></div>
+          </div>
+          <p class="text-sm opacity-80">💡 Add hero illustration here: Medical professionals, donors, or blood donation process</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-r from-red-600 to-red-700 opacity-50" style="clip-path: polygon(0 50%, 100% 80%, 100% 100%, 0% 100%);"></div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-16">
+    <!-- Quick Actions -->
+    <section class="text-center mb-16">
+      <h3 class="text-3xl font-bold text-gray-800 mb-4">How Can We Help You Today?</h3>
+      <p class="text-gray-600 mb-12 max-w-2xl mx-auto">Choose your role to get started with BloodBot's comprehensive blood donation platform</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- cards (unchanged) -->
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover border-t-4 border-red-500">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-2xl">🏥</span></div>
+          <h4 class="font-semibold text-gray-800 mb-2">Hospital Registration</h4>
+          <p class="text-gray-600 text-sm mb-4">Join our network of healthcare providers</p>
+          <a href="/hospital/register" class="btn-primary text-white px-6 py-2 rounded-lg font-medium block text-center">Register Now</a>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover border-t-4 border-green-500">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-2xl">🔐</span></div>
+          <h4 class="font-semibold text-gray-800 mb-2">Hospital Login</h4>
+          <p class="text-gray-600 text-sm mb-4">Access your hospital dashboard</p>
+          <a href="/hospital/login" class="btn-secondary px-6 py-2 rounded-lg font-medium block text-center">Login</a>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover border-t-4 border-blue-500">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-2xl">👤</span></div>
+          <h4 class="font-semibold text-gray-800 mb-2">User Login</h4>
+          <p class="text-gray-600 text-sm mb-4">Access your donor profile</p>
+          <a href="/login" class="btn-secondary px-6 py-2 rounded-lg font-medium block text-center">Login</a>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover border-t-4 border-purple-500">
+          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-2xl">⚙</span></div>
+          <h4 class="font-semibold text-gray-800 mb-2">Admin Access</h4>
+          <p class="text-gray-600 text-sm mb-4">System administration panel</p>
+          <a href="/admin" class="btn-secondary px-6 py-2 rounded-lg font-medium block text-center">Admin Panel</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Emergency Section -->
+    <section class="bg-gradient-to-r from-red-50 to-red-100 rounded-2xl p-8 mb-16 text-center relative">
+      <div class="pulse-animation mb-4"><span class="text-4xl">🚨</span></div>
+      <h3 class="text-2xl font-bold text-red-800 mb-4">Need Blood Urgently?</h3>
+      <p class="text-red-700 mb-6">Find hospitals and donors in your area quickly</p>
+
+      <div class="relative inline-block">
+        <!-- NOTE: button now has id and no inline onclick -->
+        <button id="find-blood-btn" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold text-lg flex items-center mx-auto">
+          <span class="mr-2">🔍</span>
+          Find Blood Now
+          <svg class="w-4 h-4 ml-2" id="dropdown-arrow" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+
+        <!-- Dropdown: starts hidden -->
+        <div id="dropdown" class="hidden absolute left-1/2 transform -translate-x-1/2 top-full mt-3 w-72 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+          <a href="/find-hospital" class="flex items-center px-6 py-4 text-gray-700 hover:bg-red-50 hover:text-red-700 transition-colors">
+            <span class="mr-3 text-xl">🏥</span>
+            <div class="text-left">
+              <div class="font-semibold">Find Hospital</div>
+              <div class="text-sm text-gray-500">Locate nearby hospitals</div>
             </div>
-        </section>
-    </main>
+          </a>
+          <div class="border-t border-gray-100"></div>
+          <a href="/find-donor" class="flex items-center px-6 py-4 text-gray-700 hover:bg-red-50 hover:text-red-700 transition-colors">
+            <span class="mr-3 text-xl">🩸</span>
+            <div class="text-left">
+              <div class="font-semibold">Find Donor</div>
+              <div class="text-sm text-gray-500">Connect with blood donors</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section (unchanged) -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <div class="text-center fade-in">
+        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-3xl">📱</span></div>
+        <h4 class="font-semibold text-lg mb-2">Telegram Integration</h4>
+        <p class="text-gray-600">Access BloodBot directly through Telegram for instant communication and updates</p>
+        <div class="mt-4 text-sm text-gray-500 bg-gray-100 rounded p-2">💡 Add Telegram bot interface screenshot</div>
+      </div>
+      <div class="text-center fade-in">
+        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-3xl">🌐</span></div>
+        <h4 class="font-semibold text-lg mb-2">Web Platform</h4>
+        <p class="text-gray-600">Complete web interface for hospitals and donors to manage their profiles and requests</p>
+        <div class="mt-4 text-sm text-gray-500 bg-gray-100 rounded p-2">💡 Add dashboard/interface preview</div>
+      </div>
+      <div class="text-center fade-in">
+        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4"><span class="text-3xl">⚡</span></div>
+        <h4 class="font-semibold text-lg mb-2">Real-time Matching</h4>
+        <p class="text-gray-600">Advanced algorithm matches blood requests with available donors instantly</p>
+        <div class="mt-4 text-sm text-gray-500 bg-gray-100 rounded p-2">💡 Add matching process illustration</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (unchanged) -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="blood-drop bg-white"></div>
+            <h5 class="font-bold text-xl">BloodBot</h5>
+          </div>
+          <p class="text-gray-400">Saving lives through technology and human connection.</p>
+        </div>
+        <div><h6 class="font-semibold mb-4">Quick Links</h6>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">How It Works</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">FAQ</a></li>
+          </ul></div>
+        <div><h6 class="font-semibold mb-4">Support</h6>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Emergency</a></li>
+          </ul></div>
+        <div><h6 class="font-semibold mb-4">Connect</h6>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors">Telegram Bot</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Mobile App</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">API</a></li>
+          </ul></div>
+      </div>
+      <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 BloodLink. All rights reserved. Made with ❤ for humanity.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Fixed and simplified JS for dropdown -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const btn = document.getElementById('find-blood-btn');
+      const dropdown = document.getElementById('dropdown');
+      const arrow = document.getElementById('dropdown-arrow');
+
+      if (!btn || !dropdown || !arrow) return;
+
+      // Open/close dropdown on button click — stopPropagation so document click won't immediately close it
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const opening = dropdown.classList.contains('hidden');
+        if (opening) {
+          dropdown.classList.remove('hidden');
+          // add animation class (restart animation)
+          dropdown.classList.remove('dropdown-enter');
+          // force reflow to restart
+          void dropdown.offsetWidth;
+          dropdown.classList.add('dropdown-enter');
+          arrow.style.transform = 'rotate(180deg)';
+        } else {
+          dropdown.classList.add('hidden');
+          dropdown.classList.remove('dropdown-enter');
+          arrow.style.transform = 'rotate(0deg)';
+        }
+      });
+
+      // prevent clicks inside dropdown from closing it
+      dropdown.addEventListener('click', function (e) { e.stopPropagation(); });
+
+      // close when clicking outside
+      document.addEventListener('click', function () {
+        if (!dropdown.classList.contains('hidden')) {
+          dropdown.classList.add('hidden');
+          dropdown.classList.remove('dropdown-enter');
+          arrow.style.transform = 'rotate(0deg)';
+        }
+      });
+
+      // close on Escape
+      document.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Escape') {
+          if (!dropdown.classList.contains('hidden')) {
+            dropdown.classList.add('hidden');
+            dropdown.classList.remove('dropdown-enter');
+            arrow.style.transform = 'rotate(0deg)';
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>

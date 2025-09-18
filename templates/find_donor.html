@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Find Donor</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+  <header class="bg-red-600 text-white py-4 text-center">
+    <h1 class="text-2xl font-bold">Find Donors</h1>
+  </header>
+
+  <main class="container mx-auto py-6">
+    <!-- Filters -->
+    <form method="get" action="/find-donor" class="mb-6 bg-white p-4 rounded shadow flex flex-wrap gap-4">
+      <select name="city" class="border rounded px-3 py-2 w-full md:w-1/4">
+        <option value="">-- Select City --</option>
+        {% for c in all_cities %}
+          <option value="{{ c }}" {% if selected_city == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="state" class="border rounded px-3 py-2 w-full md:w-1/4">
+        <option value="">-- Select State --</option>
+        {% for s in all_states %}
+          <option value="{{ s }}" {% if selected_state == s %}selected{% endif %}>{{ s }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="district" class="border rounded px-3 py-2 w-full md:w-1/4">
+        <option value="">-- Select District --</option>
+        {% for d in all_districts %}
+          <option value="{{ d }}" {% if selected_district == d %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="blood_group" class="border rounded px-3 py-2 w-full md:w-1/4">
+        <option value="">-- Select Blood Group --</option>
+        {% for bg in all_blood_groups %}
+          <option value="{{ bg }}" {% if selected_blood_group == bg %}selected{% endif %}>{{ bg }}</option>
+        {% endfor %}
+      </select>
+
+      <div class="flex items-center space-x-2">
+        <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+          Apply Filters
+        </button>
+        <a href="/find-donor" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700">Clear</a>
+      </div>
+    </form>
+
+    <!-- Donors List -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% if donors %}
+        {% for donor in donors %}
+          <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-bold text-red-700">{{ donor.name or 'Unnamed' }}</h2>
+            <p><strong>Blood Group:</strong> {{ donor.blood_group or 'N/A' }}</p>
+            <p><strong>City:</strong> {{ donor.city or 'N/A' }}</p>
+            <p><strong>District:</strong> {{ donor.district or 'N/A' }}</p>
+            <p><strong>State:</strong> {{ donor.state or 'N/A' }}</p>
+            <p><strong>Contact:</strong> {{ donor.contact_number or 'N/A' }}</p>
+            <p><strong>Age:</strong> {{ donor.age or 'N/A' }}</p>
+            <p><strong>Weight:</strong> {{ donor.weight or 'N/A' }} kg</p>
+            <p><strong>Health:</strong> {{ donor.health_condition or 'N/A' }}</p>
+            <p><strong>Donations:</strong> {{ donor.donation_count or 0 }}</p>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-span-full bg-white p-6 rounded shadow text-center">
+          <p class="text-gray-600">No donors found matching the filters.</p>
+        </div>
+      {% endif %}
+    </div>
+  </main>
+</body>
+</html>

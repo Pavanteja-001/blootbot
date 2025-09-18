@@ -44,3 +44,4 @@ if __name__ == '__main__':
     loop.call_soon_threadsafe(loop.stop)
     loop.run_until_complete(loop.shutdown_asyncgens())
     loop.close()
+

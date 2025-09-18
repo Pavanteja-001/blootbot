@@ -13,7 +13,7 @@
             <h2 class="text-xl font-semibold mb-4">Donors</h2>
             <ul class="mb-6">
                 {% for donor in donors %}
-                <li>{{ donor.name }} ({{ donor.blood_group }}), {{ donor.address }}, Contact: {{ donor.contact_number }}</li>
+                <li>{{ donor.name | default('N/A') }} ({{ donor.blood_group | default('N/A') }}), {{ donor.address | default('N/A') }}, Contact: {{ donor.contact_number | default('N/A') }}</li>
                 {% else %}
                 <li>No donors found.</li>
                 {% endfor %}
@@ -21,7 +21,14 @@
             <h2 class="text-xl font-semibold mb-4">Patients</h2>
             <ul class="mb-6">
                 {% for patient in patients %}
-                <li>{{ patient.name }} needs {{ patient.units_needed }} units of {{ patient.blood_group }} at {{ patient.hospital_name }}, {{ patient.hospital_location }} ({{ patient.urgency }})</li>
+                <li>
+                    {{ patient.name | default('N/A') }}
+                    {% if patient.units_needed != 'N/A' %}
+                        needs {{ patient.units_needed }} units of {{ patient.blood_group | default('N/A') }} at {{ patient.hospital_name | default('N/A') }}, {{ patient.hospital_location | default('N/A') }} ({{ patient.urgency | default('N/A') }})
+                    {% else %}
+                        ({{ patient.blood_group | default('N/A') }}). No active request details available.
+                    {% endif %}
+                </li>
                 {% else %}
                 <li>No patients found.</li>
                 {% endfor %}
@@ -29,7 +36,7 @@
             <h2 class="text-xl font-semibold mb-4">Hospitals</h2>
             <ul>
                 {% for hospital in hospitals %}
-                <li>{{ hospital.name }} ({{ hospital.registration_number }}), {{ hospital.city }} - Blood Inventory: {% for bg, units in hospital.blood_inventory.items() %}{{ bg }}: {{ units }} {% endfor %}</li>
+                <li>{{ hospital.name | default('N/A') }} ({{ hospital.registration_number | default('N/A') }}), {{ hospital.city | default('N/A') }} - Blood Inventory: {% for bg, units in hospital.blood_inventory.items() %}{{ bg | default('N/A') }}: {{ units | default(0) }} {% endfor %}</li>
                 {% else %}
                 <li>No hospitals found.</li>
                 {% endfor %}

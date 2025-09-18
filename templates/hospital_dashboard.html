@@ -4,169 +4,595 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hospital Dashboard - BloodBot</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            min-height: 100vh;
+            color: #374151;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(220, 38, 38, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #fee2e2;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #f3f4f6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fefefe;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-input:read-only {
+            background: #f9fafb;
+            color: #6b7280;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .blood-group-card {
+            background: #fef7f7;
+            border: 2px solid #fecaca;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .blood-group-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+        }
+
+        .blood-group-label {
+            font-weight: 700;
+            color: #dc2626;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #047857, #065f46);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .data-table tr:hover {
+            background: #fef7f7;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .urgency-high {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .urgency-medium {
+            color: #d97706;
+            font-weight: 600;
+        }
+
+        .urgency-low {
+            color: #059669;
+            font-weight: 500;
+        }
+
+        .file-input {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            border: 2px dashed #dc2626;
+            border-radius: 8px;
+            text-align: center;
+            color: #dc2626;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            background: #fef7f7;
+            border-color: #b91c1c;
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .logout-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            background: #6b7280;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-link:hover {
+            background: #4b5563;
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #fee2e2;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto py-8">
-        <h1 class="text-2xl font-bold text-center mb-6">Hospital Dashboard</h1>
-        <div class="max-w-4xl mx-auto bg-white p-6 rounded shadow">
-            <h2 class="text-xl font-semibold mb-4">Hospital Details</h2>
-            <form id="hospitalForm" class="mb-8">
-                <div class="mb-4">
-                    <label class="block text-gray-700">Registration Number</label>
-                    <input type="text" name="registration_number" value="{{ hospital.registration_number }}" class="w-full border px-3 py-2 rounded" readonly>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-hospital"></i> Hospital Dashboard</h1>
+            <p class="subtitle">BloodBot Management System</p>
+        </div>
+        
+        <div class="dashboard-card">
+            <h2 class="section-title">
+                <i class="fas fa-building"></i>
+                Hospital Details
+            </h2>
+            <form id="hospitalForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="form-label">Registration Number</label>
+                    <input type="text" name="registration_number" value="{{ hospital.registration_number }}" class="form-input" readonly>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">Name</label>
-                    <input type="text" name="name" value="{{ hospital.name }}" class="w-full border px-3 py-2 rounded" required>
+
+                <div class="form-group">
+                    <label class="form-label">Hospital Name</label>
+                    <input type="text" name="name" value="{{ hospital.name }}" class="form-input" required>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">Address</label>
-                    <input type="text" name="address" value="{{ hospital.address }}" class="w-full border px-3 py-2 rounded" required>
+
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="address" value="{{ hospital.address }}" class="form-input" required>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">City</label>
-                    <input type="text" name="city" value="{{ hospital.city }}" class="w-full border px-3 py-2 rounded" required>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input type="text" name="city" value="{{ hospital.city }}" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">District</label>
+                        <input type="text" name="district" value="{{ hospital.district }}" class="form-input" required>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">District</label>
-                    <input type="text" name="district" value="{{ hospital.district }}" class="w-full border px-3 py-2 rounded" required>
+
+                <div class="form-group">
+                    <label class="form-label">State</label>
+                    <input type="text" name="state" value="{{ hospital.state }}" class="form-input" required>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700">State</label>
-                    <input type="text" name="state" value="{{ hospital.state }}" class="w-full border px-3 py-2 rounded" required>
+
+                <div class="form-group">
+                    <label class="form-label">Hospital License</label>
+                    <div class="file-input">
+                        <input type="file" name="hospital_license" id="hospitalLicense" accept="image/*,.pdf">
+                        <label for="hospitalLicense" class="file-input-label">
+                            <i class="fas fa-upload"></i> Click to upload license document
+                        </label>
+                    </div>
+                    {% if hospital.hospital_license_url %}
+                        <a href="{{ hospital.hospital_license_url }}" target="_blank" class="btn btn-info" style="margin-top: 0.5rem;">
+                            <i class="fas fa-eye"></i> View Current License
+                        </a>
+                    {% endif %}
                 </div>
-                <h3 class="text-lg font-semibold mb-2">Blood Inventory</h3>
-                {% for blood_group in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
-                <div class="mb-4">
-                    <label class="block text-gray-700">{{ blood_group }}</label>
-                    <input type="number" name="{{ blood_group }}" value="{{ hospital.blood_inventory[blood_group] | default(0) }}" class="w-full border px-3 py-2 rounded" min="0">
+
+                <div class="form-group">
+                    <label class="form-label">Hospital Photo</label>
+                    <div class="file-input">
+                        <input type="file" name="hospital_photo" id="hospitalPhoto" accept="image/*">
+                        <label for="hospitalPhoto" class="file-input-label">
+                            <i class="fas fa-camera"></i> Click to upload hospital photo
+                        </label>
+                    </div>
+                    {% if hospital.hospital_photo_url %}
+                        <img src="{{ hospital.hospital_photo_url }}" id="hospitalPreview" class="image-preview" style="width: 100%; height: 200px; object-fit: cover;" alt="Hospital Photo">
+                    {% else %}
+                        <img id="hospitalPreview" class="image-preview" style="width: 100%; height: 200px; object-fit: cover; display: none;" alt="Hospital Photo Preview">
+                    {% endif %}
                 </div>
-                {% endfor %}
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Update Details</button>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-map-marker-alt"></i> Latitude</label>
+                        <input type="text" name="latitude" value="{{ hospital.latitude }}" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"><i class="fas fa-map-marker-alt"></i> Longitude</label>
+                        <input type="text" name="longitude" value="{{ hospital.longitude }}" class="form-input" required>
+                    </div>
+                </div>
+
+                <h3 class="section-title">
+                    <i class="fas fa-tint"></i>
+                    Blood Inventory
+                </h3>
+                
+                <div class="grid-4">
+                    {% for blood_group in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] %}
+                    <div class="blood-group-card">
+                        <div class="blood-group-label">{{ blood_group }}</div>
+                        <input type="number" name="{{ blood_group }}" value="{{ hospital.blood_inventory[blood_group] | default(0) }}" class="form-input" min="0" placeholder="Units">
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+                    <i class="fas fa-save"></i>
+                    Update Hospital Details
+                </button>
             </form>
+        </div>
 
-            <h2 class="text-xl font-semibold mb-4">Blood Requests</h2>
+        <div class="dashboard-card">
+            <h2 class="section-title">
+                <i class="fas fa-hand-holding-medical"></i>
+                Blood Requests
+            </h2>
             {% if requests %}
-            <table class="w-full mb-8">
-                <thead>
-                    <tr>
-                        <th class="border px-4 py-2">Patient Name</th>
-                        <th class="border px-4 py-2">Contact</th>
-                        <th class="border px-4 py-2">Blood Group</th>
-                        <th class="border px-4 py-2">Units Needed</th>
-                        <th class="border px-4 py-2">Urgency</th>
-                        <th class="border px-4 py-2">Time Needed</th>
-                        <th class="border px-4 py-2">City</th>
-                        <th class="border px-4 py-2">Status</th>
-                        <th class="border px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for request in requests %}
-                    <tr>
-                        <td class="border px-4 py-2">{{ request.patient_name }}</td>
-                        <td class="border px-4 py-2">{{ request.patient_contact }}</td>
-                        <td class="border px-4 py-2">{{ request.blood_group }}</td>
-                        <td class="border px-4 py-2">{{ request.units_needed }}</td>
-                        <td class="border px-4 py-2">{{ request.urgency }}</td>
-                        <td class="border px-4 py-2">{{ request.time_needed }}</td>
-                        <td class="border px-4 py-2">{{ request.city }}</td>
-                        <td class="border px-4 py-2">{{ request.status | capitalize }}</td>
-                        <td class="border px-4 py-2">
-                            {% if request.status == 'pending' %}
-                            <button onclick="approveRequest('{{ request._id }}')" class="bg-green-500 text-white px-2 py-1 rounded">Approve</button>
-                            <button onclick="rejectRequest('{{ request._id }}')" class="bg-red-500 text-white px-2 py-1 rounded">Reject</button>
-                            {% else %}
-                            <span>-</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-user"></i> Patient</th>
+                            <th><i class="fas fa-phone"></i> Contact</th>
+                            <th><i class="fas fa-tint"></i> Blood Group</th>
+                            <th><i class="fas fa-calculator"></i> Units</th>
+                            <th><i class="fas fa-exclamation-triangle"></i> Urgency</th>
+                            <th><i class="fas fa-clock"></i> Time Needed</th>
+                            <th><i class="fas fa-map-marker"></i> City</th>
+                            <th><i class="fas fa-info-circle"></i> Status</th>
+                            <th><i class="fas fa-cogs"></i> Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in requests %}
+                        <tr>
+                            <td>{{ request.patient_name }}</td>
+                            <td>{{ request.patient_contact }}</td>
+                            <td><strong style="color: #dc2626;">{{ request.blood_group }}</strong></td>
+                            <td>{{ request.units_needed }}</td>
+                            <td class="urgency-{{ request.urgency.lower() }}">{{ request.urgency }}</td>
+                            <td>{{ request.time_needed }}</td>
+                            <td>{{ request.city }}</td>
+                            <td><span class="status-badge status-{{ request.status }}">{{ request.status }}</span></td>
+                            <td>
+                                {% if request.status == 'pending' %}
+                                <button onclick="approveRequest('{{ request._id }}')" class="btn btn-success" style="margin-right: 0.5rem;">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button onclick="rejectRequest('{{ request._id }}')" class="btn btn-danger">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                                {% else %}
+                                <span style="color: #6b7280;">No actions available</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% else %}
-            <p>No blood requests.</p>
-            {% endif %}
-
-            <h2 class="text-xl font-semibold mb-4">Unverified Donors</h2>
-            {% if donors %}
-            <table class="w-full">
-                <thead>
-                    <tr>
-                        <th class="border px-4 py-2">Name</th>
-                        <th class="border px-4 py-2">Blood Group</th>
-                        <th class="border px-4 py-2">Contact</th>
-                        <th class="border px-4 py-2">City</th>
-                        <th class="border px-4 py-2">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for donor in donors %}
-                    <tr>
-                        <td class="border px-4 py-2">{{ donor.name }}</td>
-                        <td class="border px-4 py-2">{{ donor.blood_group }}</td>
-                        <td class="border px-4 py-2">{{ donor.contact_number }}</td>
-                        <td class="border px-4 py-2">{{ donor.city }}</td>
-                        <td class="border px-4 py-2">
-                            <button onclick="verifyDonor('{{ donor._id }}')" class="bg-blue-500 text-white px-2 py-1 rounded">Verify</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p>No unverified donors in your city.</p>
+            <div class="no-data">
+                <i class="fas fa-inbox" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem;"></i>
+                <p>No blood requests at this time.</p>
+            </div>
             {% endif %}
         </div>
-        <p class="text-center mt-4"><a href="{{ url_for('hospital_login') }}" class="text-blue-500">Logout</a></p>
+
+        <div class="dashboard-card">
+            <h2 class="section-title">
+                <i class="fas fa-user-check"></i>
+                Unverified Donors
+            </h2>
+            {% if donors %}
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-user"></i> Name</th>
+                            <th><i class="fas fa-tint"></i> Blood Group</th>
+                            <th><i class="fas fa-phone"></i> Contact</th>
+                            <th><i class="fas fa-map-marker"></i> City</th>
+                            <th><i class="fas fa-cogs"></i> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for donor in donors %}
+                        <tr>
+                            <td>{{ donor.name }}</td>
+                            <td><strong style="color: #dc2626;">{{ donor.blood_group }}</strong></td>
+                            <td>{{ donor.contact_number }}</td>
+                            <td>{{ donor.city }}</td>
+                            <td>
+                                <button onclick="verifyDonor('{{ donor._id }}')" class="btn btn-info">
+                                    <i class="fas fa-check-circle"></i> Verify
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="no-data">
+                <i class="fas fa-user-check" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem;"></i>
+                <p>No unverified donors in your city.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            <a href="{{ url_for('hospital_login') }}" class="logout-link">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
     </div>
+
     <script>
         async function approveRequest(requestId) {
-            const response = await fetch(`/hospital/approve_request/${requestId}`, {
-                method: 'POST'
-            });
+            const response = await fetch(/hospital/approve_request/${requestId}, { method: 'POST' });
             const result = await response.json();
             alert(result.message || result.error);
-            if (response.ok) {
-                window.location.reload();
-            }
+            if (response.ok) window.location.reload();
         }
 
         async function rejectRequest(requestId) {
-            const response = await fetch(`/hospital/reject_request/${requestId}`, {
-                method: 'POST'
-            });
+            const response = await fetch(/hospital/reject_request/${requestId}, { method: 'POST' });
             const result = await response.json();
             alert(result.message || result.error);
-            if (response.ok) {
-                window.location.reload();
-            }
+            if (response.ok) window.location.reload();
         }
 
         async function verifyDonor(donorId) {
-            const response = await fetch(`/hospital/verify_donor/${donorId}`, {
-                method: 'POST'
-            });
+            const response = await fetch(/hospital/verify_donor/${donorId}, { method: 'POST' });
             const result = await response.json();
             alert(result.message || result.error);
-            if (response.ok) {
-                window.location.reload();
-            }
+            if (response.ok) window.location.reload();
         }
+
+        // Preview hospital photo
+        document.getElementById('hospitalPhoto').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = document.getElementById('hospitalPreview');
+                    img.src = event.target.result;
+                    img.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
         document.getElementById('hospitalForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
-            const response = await fetch('/hospital/dashboard', {
-                method: 'POST',
-                body: formData
-            });
+            const response = await fetch('/hospital/dashboard', { method: 'POST', body: formData });
             const result = await response.json();
             alert(result.message || result.error);
-            if (response.ok) {
-                window.location.reload();
-            }
+            if (response.ok) window.location.reload();
         });
     </script>
 </body>
