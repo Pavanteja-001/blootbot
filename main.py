@@ -1,3 +1,4 @@
+
 import os
 import asyncio
 import threading
@@ -42,18 +43,20 @@ threading.Thread(target=loop.run_forever, daemon=True).start()
 # Initialize bot and application
 try:
     asyncio.run_coroutine_threadsafe(initialize_bot_and_app(), loop).result()
-    logger.info("Bot and application initialized")
+    logger.info("Bot and application initialized successfully")
 except Exception as e:
-    logger.error(f"Failed to initialize bot: {e}")
+    logger.error(f"Failed to initialize bot: {e}", exc_info=True)
+    exit(1)
+
+# Set webhook on startup
+try:
+    asyncio.run_coroutine_threadsafe(main_bot.set_webhook(WEBHOOK_URL), loop).result()
+    logger.info(f"Webhook set to {WEBHOOK_URL}")
+except Exception as e:
+    logger.error(f"Failed to set webhook: {e}", exc_info=True)
     exit(1)
 
 if __name__ == '__main__':
-    try:
-        asyncio.run_coroutine_threadsafe(main_bot.set_webhook(WEBHOOK_URL), loop).result()
-        logger.info(f"Webhook set to {WEBHOOK_URL}")
-    except Exception as e:
-        logger.error(f"Failed to set webhook: {e}")
-        exit(1)
     port = int(os.getenv("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
     loop.call_soon_threadsafe(loop.stop)
