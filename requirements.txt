@@ -5,3 +5,4 @@ bcrypt==4.2.0
 twilio==9.2.3
 gunicorn==23.0.0
 python-dotenv==1.0.1
+cloudinary==1.41.0
