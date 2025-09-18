@@ -1,14 +1,16 @@
-from flask import Flask, request
-from telegram import Update
-from config import FLASK_SECRET_KEY, WEBHOOK_URL, PORT, logger
-from bot_handlers import main_bot, application, initialize_bot_and_app
+```python
+import os
 import asyncio
 import threading
+from flask import Flask, request
+from telegram import Update
+from config import FLASK_SECRET_KEY, WEBHOOK_URL, logger
+from bot_handlers import main_bot, application, initialize_bot_and_app
 from routes import register_routes
 
 # Initialize Flask app
 app = Flask(__name__)
-app.secret_key = FLASK_SECRET_KEY
+app.secret_key = os.getenv("FLASK_SECRET_KEY", FLASK_SECRET_KEY)
 
 # Register routes
 register_routes(app)
@@ -40,8 +42,9 @@ if __name__ == '__main__':
     except Exception as e:
         logger.error(f"Failed to set webhook: {e}")
         exit(1)
-    app.run(host='0.0.0.0', port=PORT)
+    # Use Render's PORT environment variable or fallback to 5000 for local testing
+    port = int(os.getenv("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
     loop.call_soon_threadsafe(loop.stop)
     loop.run_until_complete(loop.shutdown_asyncgens())
     loop.close()
-
