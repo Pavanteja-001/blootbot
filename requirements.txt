@@ -1,0 +1,7 @@
+Flask==2.3.3
+python-telegram-bot==21.4
+pymongo==4.8.0
+bcrypt==4.2.0
+twilio==9.2.3
+gunicorn==23.0.0
+python-dotenv==1.0.1
